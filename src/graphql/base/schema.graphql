@@ -1,0 +1,10 @@
+# scalar JSON;
+scalar EmailAddress
+
+type Query {
+  _: String
+}
+
+type Mutation {
+  _: String
+}
