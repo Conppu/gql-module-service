@@ -1,3 +1,5 @@
+import { Context } from "../../providers/context";
+
 const users = [
   {
     id: 1,
@@ -17,12 +19,13 @@ export default {
   },
 
   Mutation: {
-    user: (_parent: any, { name, email }: any, ctx: GraphQLModules.Context) => {
+    user: (_parent: any, { name, email }: any, ctx: Context) => {
       const data = {
-        id: Math.random() * (100000 - 1) + 1,
+        id: Math.round(Math.random() * (10000 - 1) + 1),
         name: name || "",
         email: email || "",
       };
+      ctx.log.info("Mutation:user", { a: 11 });
       users.push(data);
       return data;
     },

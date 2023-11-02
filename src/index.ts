@@ -4,25 +4,19 @@ import express from "express";
 import { createServer } from "http";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { WebSocketServer } from "ws";
+import { applyMiddleware } from "graphql-middleware";
 import { useServer } from "graphql-ws/lib/use/ws";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
 
-import { ApolloServer, BaseContext, ContextFunction } from "@apollo/server";
-import {
-  ExpressContextFunctionArgument,
-  expressMiddleware,
-} from "@apollo/server/express4";
 import application from "./graphql/application.js";
+import { formatError } from "./providers/error.js";
+import { getContext } from "./providers/context.js";
+import { permissions } from "./providers/shield.js";
+import env from "./providers/env.js";
 
-interface Context extends BaseContext {}
-
-const getContext: ContextFunction<
-  [ExpressContextFunctionArgument],
-  Context
-> = async ({ req }) => {
-  return {};
-};
 const executor = application.createApolloExecutor();
-const schema = application.schema;
+const schema = applyMiddleware(application.schema, permissions);
 
 const app = express();
 const httpServer = createServer(app);
@@ -36,6 +30,7 @@ const serverCleanup = useServer({ schema }, wsServer);
 
 const server = new ApolloServer({
   introspection: true,
+  csrfPrevention: true,
   gateway: {
     async load() {
       return { executor };
@@ -58,6 +53,7 @@ const server = new ApolloServer({
       },
     },
   ],
+  formatError,
 });
 
 await server.start();
@@ -71,6 +67,6 @@ app.use(
 
 app.get("/ping", (_req, res) => res.send("pong"));
 
-httpServer.listen({ port: 4000 }, () => {
+httpServer.listen({ port: env.PORT }, () => {
   console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 });

@@ -18,7 +18,7 @@ const gqlModule = createModule({
     }
 
     type Mutation {
-      sendMessage(message: String!): Message!
+      sendMessage(message: String!): Message
     }
 
     type Subscription {
@@ -26,8 +26,8 @@ const gqlModule = createModule({
     }
 
     type Message {
-      id: ID!
-      body: String!
+      id: Int
+      body: String
     }
   `,
   resolvers: {
@@ -39,18 +39,20 @@ const gqlModule = createModule({
     Mutation: {
       sendMessage(_parent: any, { message }: any, ctx: GraphQLModules.Context) {
         const created = {
-          id: Math.random() * (100000 - 1) + 1,
+          id: Math.round(Math.random() * (10000 - 1) + 1),
           body: message,
         };
 
+        pubsub.publish(MESSAGE_ADDED, { messageAdded: created });
         messages.push(created);
-        pubsub.publish(MESSAGE_ADDED, { messageAdded: message });
+        return created;
       },
     },
     Subscription: {
       messageAdded: {
         subscribe(_root: any, _args: any, ctx: GraphQLModules.Context) {
-          return pubsub.asyncIterator(MESSAGE_ADDED);
+          console.log("Hello=========");
+          return pubsub.asyncIterator([MESSAGE_ADDED]);
         },
       },
     },
