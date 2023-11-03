@@ -3,11 +3,11 @@ type Query {
 }
 
 type Mutation {
-  user(email: EmailAddress, name: String): User
+  user(email: String, name: String): User
 }
 
 type User {
   id: Int
-  email: EmailAddress
+  email: String
   name: String!
 }

@@ -1,17 +1,13 @@
-import { BaseContext, ContextFunction } from "@apollo/server";
+import { ContextFunction } from "@apollo/server";
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
 import { Log } from "./logger.js";
 import env from "./env.js";
-
-export interface Context extends BaseContext {
-  log: typeof Log;
-  env: typeof env;
-}
+import { Context } from "../types/context.js";
 
 export const getContext: ContextFunction<
   [ExpressContextFunctionArgument],
   Context
-> = async ({ req }) => {
+> = async () => {
   return {
     log: Log,
     env,

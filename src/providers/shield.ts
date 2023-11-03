@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApolloError } from "apollo-server-errors";
 import { rule, shield } from "graphql-shield";
 import { Log } from "./logger.js";
 
-const isAuthenticated = rule({ cache: "contextual" })(
-  async (parent, args, ctx, info) => {
-    return ctx.user.isAuthenticated;
-  }
-);
+const isAuthenticated = rule({ cache: "contextual" })(async (
+  _parent,
+  _args,
+  ctx,
+  _info,
+) => {
+  return ctx.user.isAuthenticated;
+});
 
 export const permissions = shield(
   {
@@ -14,7 +18,7 @@ export const permissions = shield(
     Mutation: {},
   },
   {
-    async fallbackError(thrownThing, parent, args, context, info) {
+    async fallbackError(thrownThing, _parent, _args, _context, _info) {
       if (thrownThing instanceof ApolloError) {
         // expected errors
         return thrownThing;
@@ -29,5 +33,5 @@ export const permissions = shield(
       console.error(thrownThing);
       return new ApolloError("Internal server error", "ERR_INTERNAL_SERVER");
     },
-  }
+  },
 );

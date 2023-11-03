@@ -58,7 +58,7 @@ export const Log = createLogger({
     timestamp(),
     // string interpolation
     splat(),
-    printf(formatter)
+    printf(formatter),
   ),
   transports: [new transports.Console({ format: colorize({ all: true }) })],
 });
@@ -70,5 +70,5 @@ export const loggerHTTPMiddleware = morgan(
     stream: {
       write: (message: unknown) => Log.http(message),
     },
-  }
+  },
 );

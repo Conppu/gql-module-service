@@ -1,4 +1,5 @@
-import { Context } from "../../providers/context";
+import { Context } from "../../types/context";
+import { UserModule } from "./types";
 
 const users = [
   {
@@ -13,7 +14,7 @@ const users = [
   },
 ];
 
-export default {
+const resolvers: UserModule.Resolvers = {
   Query: {
     users: () => users,
   },
@@ -31,3 +32,5 @@ export default {
     },
   },
 };
+
+export default resolvers;

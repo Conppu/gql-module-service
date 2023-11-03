@@ -9,7 +9,7 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 
-import application from "./graphql/application.js";
+import application from "./modules/application.js";
 import { formatError } from "./providers/error.js";
 import { getContext } from "./providers/context.js";
 import { permissions } from "./providers/shield.js";
@@ -36,7 +36,7 @@ const server = new ApolloServer({
       return { executor };
     },
     onSchemaLoadOrUpdate(callback) {
-      callback({ apiSchema: schema } as any);
+      callback({ apiSchema: schema } as never);
       return () => {};
     },
     async stop() {},
@@ -62,7 +62,7 @@ app.use(
   "/graphql",
   cors(),
   bodyParser.json(),
-  expressMiddleware(server, { context: getContext })
+  expressMiddleware(server, { context: getContext }),
 );
 
 app.get("/ping", (_req, res) => res.send("pong"));
