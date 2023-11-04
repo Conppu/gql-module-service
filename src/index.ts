@@ -10,10 +10,12 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 
 import application from "./modules/application.js";
-import { formatError } from "./providers/error.js";
-import { getContext } from "./providers/context.js";
+import getContext from "./providers/context.js";
 import { permissions } from "./providers/shield.js";
-import env from "./providers/env.js";
+import configs from "./providers/configs.js";
+import logger, { loggerHTTPMiddleware } from "./providers/logger.js";
+import formatError from "./utils/format-error.js";
+import { database } from "./providers/prisma.js";
 
 const executor = application.createApolloExecutor();
 const schema = applyMiddleware(application.schema, permissions);
@@ -24,6 +26,29 @@ const httpServer = createServer(app);
 const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/graphql",
+});
+
+wsServer.on("connection", function connection(ws) {
+  logger.info("Connected to WebSocketServer ✅ ✅ ✅");
+  ws.on("error", console.error);
+  ws.on("pong", () => console.debug("WS connected...."));
+  ws.on("error", logger.error);
+
+  ws.on("message", function message(data) {
+    console.log("received: %s", data);
+  });
+
+  ws.send("something");
+});
+
+const interval = setInterval(function ping() {
+  wsServer.clients.forEach(function each(ws) {
+    ws.ping();
+  });
+}, 30000);
+
+wsServer.on("close", function close() {
+  clearInterval(interval);
 });
 
 const serverCleanup = useServer({ schema }, wsServer);
@@ -58,6 +83,8 @@ const server = new ApolloServer({
 
 await server.start();
 
+app.use(loggerHTTPMiddleware);
+
 app.use(
   "/graphql",
   cors(),
@@ -67,6 +94,9 @@ app.use(
 
 app.get("/ping", (_req, res) => res.send("pong"));
 
-httpServer.listen({ port: env.PORT }, () => {
-  console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+httpServer.listen({ port: configs.PORT }, async () => {
+  logger.info(
+    `🚀 Server ready at http://localhost:${configs.PORT}/graphql ✅ ✅ ✅`,
+  );
+  await database.connect();
 });

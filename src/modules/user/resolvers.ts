@@ -16,7 +16,13 @@ const users = [
 
 const resolvers: UserModule.Resolvers = {
   Query: {
-    users: () => users,
+    users: (_parent: any, arg: any, ctx: Context) => {
+      if (ctx.configs.IS_PROD) {
+        return users;
+      }
+
+      throw new ctx.errors.EntityNotFoundError("Unknown");
+    },
   },
 
   Mutation: {
@@ -26,7 +32,7 @@ const resolvers: UserModule.Resolvers = {
         name: name || "",
         email: email || "",
       };
-      ctx.log.info("Mutation:user", { a: 11 });
+      ctx.logger.info("Mutation:user", { a: 11 });
       users.push(data);
       return data;
     },

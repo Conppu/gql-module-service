@@ -10,8 +10,8 @@ const endStr = "# =====KEY PAIR END=====";
 
 const program = new Command();
 
-const envPath = resolve( ".env");
-const envExamplePath = resolve( ".env.local");
+const envPath = resolve(".env");
+const envExamplePath = resolve(".env.local");
 
 const options = program
   .helpOption("-h, --help", "help message")
@@ -21,7 +21,7 @@ const options = program
 
 async function setEnvValues(input) {
   if (!existsSync(envPath)) {
-    writeFileSync(envPath, '')
+    writeFileSync(envPath, "");
   }
   // read file from hdd & split if from a linebreak to a array
   let ENV_VARS = readFileSync(envPath, "utf8").split(EOL);
@@ -86,7 +86,7 @@ async function generateKeys() {
         PASS_PHRASE: options.passphrase ? `"${options.passphrase}"` : '""',
       });
       process.exit(0);
-    }
+    },
   );
 }
 

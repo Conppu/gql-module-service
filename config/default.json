@@ -1,0 +1,9 @@
+{
+    "PORT": 4000,
+    "SSH": {
+        "PUBLIC_KEY": "",
+        "PRIVATE_KEY": "",
+        "PASS_PHRASE": ""
+    },
+    "DATABASE_URL": "postgres://postgres:1100@localhost:5433/prime_local"
+}

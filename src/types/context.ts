@@ -1,8 +1,10 @@
 import { BaseContext } from "@apollo/server";
-import { Log } from "../providers/logger.js";
-import env from "../providers/env.js";
+import logger from "../providers/logger.js";
+import configs from "../providers/configs.js";
+import * as errors from "../providers/errors.js";
 
 export interface Context extends BaseContext {
-  log: typeof Log;
-  env: typeof env;
+  logger: typeof logger;
+  configs: typeof configs;
+  errors: typeof errors;
 }

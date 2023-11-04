@@ -1,7 +1,6 @@
 import morgan from "morgan";
 import { createLogger, format, transports, addColors } from "winston";
-
-const isProduction = false;
+import configs from "./configs.js";
 
 const { combine, colorize, timestamp, errors, printf, splat, metadata } =
   format;
@@ -39,7 +38,7 @@ const formatter = ({
   return customFormat;
 };
 
-export const Log = createLogger({
+const logger = createLogger({
   levels: {
     error: 0,
     warn: 1,
@@ -49,7 +48,7 @@ export const Log = createLogger({
     debug: 5,
     silly: 6,
   },
-  level: isProduction ? "error" : "silly",
+  level: configs.IS_PROD ? "error" : "silly",
   format: combine(
     // error stack trace in metadata
     errors({ stack: true }),
@@ -68,7 +67,9 @@ export const loggerHTTPMiddleware = morgan(
   ":method :url :status :res[content-length] - :response-time ms",
   {
     stream: {
-      write: (message: unknown) => Log.http(message),
+      write: (message: unknown) => logger.http(message),
     },
   },
 );
+
+export default logger;

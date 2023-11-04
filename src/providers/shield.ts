@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ApolloError } from "apollo-server-errors";
+import { ApolloError, AuthenticationError } from "apollo-server-errors";
 import { rule, shield } from "graphql-shield";
-import { Log } from "./logger.js";
+import logger from "./logger.js";
+import { InternalServerError } from "./errors.js";
 
 const isAuthenticated = rule({ cache: "contextual" })(async (
   _parent,
@@ -25,13 +26,13 @@ export const permissions = shield(
       }
       if (thrownThing instanceof Error) {
         // unexpected errors
-        Log.error(thrownThing);
-        return new ApolloError("Internal server error", "ERR_INTERNAL_SERVER");
+        logger.error(thrownThing);
+        return new InternalServerError("SHIELD_FALLBACK_ERROR");
       }
       // what the hell got thrown
-      console.error("The resolver threw something that is not an error.");
-      console.error(thrownThing);
-      return new ApolloError("Internal server error", "ERR_INTERNAL_SERVER");
+      logger.error("The resolver threw something that is not an error.");
+      logger.error(thrownThing);
+      return new InternalServerError("SHIELD_FALLBACK_ERROR");
     },
   },
 );
