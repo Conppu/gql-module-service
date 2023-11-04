@@ -25,6 +25,7 @@
     "db:seed": "prisma db seed",
     "nvm": "nvm i && nvm use",
     "setup": "npm run clean && npm ci && npm run db:deploy && npm run db:generate && npm run build",
+    "setup:update": "npm run clean && npm ci && npm run db:generate && npm run db:deploy && npm run build",
     "setup:local": "npm run clean && npm ci && npm run ssh:generate && npm run db:deploy && npm run db:generate && npm run build"
   },
   "repository": {
