@@ -6,5 +6,9 @@ type Query {
 }
 
 type Mutation {
-  _: String!
+  _(message: String!): String!
+}
+
+type Subscription {
+  _: String
 }

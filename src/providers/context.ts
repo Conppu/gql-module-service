@@ -1,9 +1,10 @@
 import { ContextFunction } from "@apollo/server";
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
+import { Context } from "../types/context.js";
 import logger from "./logger.js";
 import configs from "./configs.js";
 import * as errors from "./errors.js";
-import { Context } from "../types/context.js";
+import pubsub, { subscriptionName } from "./pubsub.js";
 
 const getContext: ContextFunction<
   [ExpressContextFunctionArgument],
@@ -13,6 +14,8 @@ const getContext: ContextFunction<
     logger,
     configs,
     errors,
+    pubsub,
+    subscriptionName,
   };
 };
 

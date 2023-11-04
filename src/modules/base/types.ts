@@ -4,10 +4,15 @@ export namespace BaseModule {
   interface DefinedFields {
     Query: "_";
     Mutation: "_";
+    Subscription: "_";
   }
 
   export type Query = Pick<Types.Query, DefinedFields["Query"]>;
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>;
+  export type Subscription = Pick<
+    Types.Subscription,
+    DefinedFields["Subscription"]
+  >;
 
   export type QueryResolvers = Pick<
     Types.QueryResolvers,
@@ -17,10 +22,15 @@ export namespace BaseModule {
     Types.MutationResolvers,
     DefinedFields["Mutation"]
   >;
+  export type SubscriptionResolvers = Pick<
+    Types.SubscriptionResolvers,
+    DefinedFields["Subscription"]
+  >;
 
   export interface Resolvers {
     Query?: QueryResolvers;
     Mutation?: MutationResolvers;
+    Subscription?: SubscriptionResolvers;
   }
 
   export interface MiddlewareMap {
@@ -32,6 +42,10 @@ export namespace BaseModule {
       _?: gm.Middleware[];
     };
     Mutation?: {
+      "*"?: gm.Middleware[];
+      _?: gm.Middleware[];
+    };
+    Subscription?: {
       "*"?: gm.Middleware[];
       _?: gm.Middleware[];
     };

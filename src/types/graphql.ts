@@ -20,6 +20,9 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -35,6 +38,10 @@ export type Mutation = {
   user?: Maybe<User>;
 };
 
+export type MutationArgs = {
+  message: Scalars["String"]["input"];
+};
+
 export type MutationUserArgs = {
   email?: InputMaybe<Scalars["String"]["input"]>;
   name?: InputMaybe<Scalars["String"]["input"]>;
@@ -44,6 +51,11 @@ export type Query = {
   __typename?: "Query";
   _: Scalars["String"]["output"];
   users?: Maybe<Array<Maybe<User>>>;
+};
+
+export type Subscription = {
+  __typename?: "Subscription";
+  _?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type User = {
@@ -165,6 +177,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<NonNullable<unknown>>;
+  Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<NonNullable<unknown>>;
 };
 
@@ -175,6 +188,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   String: NonNullable<unknown>;
+  Subscription: {};
   User: NonNullable<unknown>;
 };
 
@@ -183,7 +197,12 @@ export type MutationResolvers<
   ParentType extends
     ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = {
-  _?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  _?: Resolver<
+    ResolversTypes["String"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationArgs, "message">
+  >;
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
     ParentType,
@@ -205,6 +224,19 @@ export type QueryResolvers<
   >;
 };
 
+export type SubscriptionResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["Subscription"] = ResolversParentTypes["Subscription"],
+> = {
+  _?: SubscriptionResolver<
+    Maybe<ResolversTypes["String"]>,
+    "_",
+    ParentType,
+    ContextType
+  >;
+};
+
 export type UserResolvers<
   ContextType = Context,
   ParentType extends
@@ -219,5 +251,6 @@ export type UserResolvers<
 export type Resolvers<ContextType = Context> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
