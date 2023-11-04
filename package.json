@@ -5,17 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run cp:graphql",
     "dev": "nodemon --config nodemon.json --inspect src/index.ts",
-    "start": "node dist/index.js",
-    
+    "start": "node build/index.js",
+    "cp:graphql": "copyfiles -u 1 src/modules/**/*.graphql build",
     "lint:check": "npx prettier . --check",
     "lint:fix": "npx prettier . --write",
     "prepare": "husky install",
-
     "generate:types": "gql-gen --config codegen.ts",
     "generate:ssh": "node ./scripts/generate-rsa-keys.js",
-
     "db:boot": "npm run db:generate && npm run db:deploy",
     "db:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
@@ -47,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
     "commander": "^11.1.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "graphql-codegen-typescript-common": "0.18.2",

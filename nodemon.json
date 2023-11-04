@@ -1,7 +1,7 @@
 {
   "verbose": true,
   "restartable": "rs",
-  "ignore": ["dist/", "node_modules/", ".git", ".vscode", ".github"],
+  "ignore": ["build/", "node_modules/", ".git", ".vscode", ".github"],
   "watch": ["src/"],
   "execMap": {
     "ts": "node -r ts-node/register --loader ts-node/esm"
