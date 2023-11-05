@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ApolloError, AuthenticationError } from "apollo-server-errors";
 import { rule, shield } from "graphql-shield";
 import logger from "./logger.js";
 import { InternalServerError } from "./errors.js";
+import { GraphQLError } from "graphql";
 
 const isAuthenticated = rule({ cache: "contextual" })(async (
   _parent,
@@ -20,7 +20,7 @@ export const permissions = shield(
   },
   {
     async fallbackError(thrownThing, _parent, _args, _context, _info) {
-      if (thrownThing instanceof ApolloError) {
+      if (thrownThing instanceof GraphQLError) {
         // expected errors
         return thrownThing;
       }

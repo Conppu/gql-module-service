@@ -1,17 +1,17 @@
 import { GraphQLFormattedError } from "graphql/error";
-import configs from "../providers/configs.js";
+import { ApolloServerErrorCode } from "@apollo/server/errors";
 import logger from "../providers/logger.js";
 
 const formatError = (formattedError: GraphQLFormattedError, error: any) => {
   logger.error(error);
 
-  if (formattedError.message.startsWith("Database Error: ")) {
-    return new Error("Internal server error");
-  }
-
-  if (configs.IS_PROD) {
+  if (
+    formattedError?.extensions?.code ===
+    ApolloServerErrorCode.GRAPHQL_VALIDATION_FAILED
+  ) {
     return {
-      message: formattedError.message,
+      ...formattedError,
+      message: "Your query doesn't match the schema. Try double-checking it!",
     };
   }
 

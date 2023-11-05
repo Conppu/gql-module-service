@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgres://postgres:1100@localhost:5433/prime_local
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./:/app
+    working_dir: /app
+    needs:
+      - postgres
+    restart: always
+
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1100
+      - POSTGRES_DB=prime_local
+    ports:
+      - "5432:5432"
+    restart: always
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_PASSWORD=1100
+    ports:
+      - "5050:80"
+    restart: always
