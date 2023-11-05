@@ -1,1 +1,1 @@
-# prime-service
+# gql-module-service

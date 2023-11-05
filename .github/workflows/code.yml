@@ -31,7 +31,7 @@ jobs:
   #           export NVM_DIR=~/.nvm
   #           source ~/.nvm/nvm.sh
   #           nvm use 20
-  #           cd /root/projects/prime-service
+  #           cd /root/projects/gql-module-service
   #           git checkout .
   #           git pull
   #           npm run setup:update

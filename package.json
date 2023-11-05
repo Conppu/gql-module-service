@@ -1,5 +1,5 @@
 {
-  "name": "prime-service",
+  "name": "gql-module-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -30,14 +30,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Conppu/prime-service.git"
+    "url": "git+https://github.com/Conppu/gql-module-service.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Conppu/prime-service/issues"
+    "url": "https://github.com/Conppu/gql-module-service/issues"
   },
-  "homepage": "https://github.com/Conppu/prime-service#readme",
+  "homepage": "https://github.com/Conppu/gql-module-service#readme",
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/graphql-modules-preset": "^4.0.1",
