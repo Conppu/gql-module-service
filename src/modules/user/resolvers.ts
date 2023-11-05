@@ -21,7 +21,7 @@ const resolvers: UserModule.Resolvers = {
         return users;
       }
 
-      throw new ctx.errors.EntityNotFoundError("Unknown");
+      throw ctx.GQLError("Unknown");
     },
   },
 

@@ -1,39 +1,29 @@
-// import { GraphQLError } from "graphql";
-import {
-  ApolloError,
-  AuthenticationError,
-  ForbiddenError,
-  PersistedQueryNotFoundError,
-  PersistedQueryNotSupportedError,
-  SyntaxError,
-  UserInputError,
-  ValidationError,
-} from "apollo-server-errors";
+import { GraphQLError } from "graphql";
 
-class InternalServerError extends ApolloError {
-  constructor(message: string, extensions?: Record<string, any>) {
-    super(message, "INTERNAL_SERVER", extensions);
+export type ErrorCode = "UNEXPECTED_SERVER_ERROR" | "ENTITY_NOT_FOUND";
 
-    Object.defineProperty(this, "name", { value: "InternalServerError" });
-  }
+function GQLError(
+  message: string,
+  code: ErrorCode = "UNEXPECTED_SERVER_ERROR",
+) {
+  return new GraphQLError(message, {
+    extensions: {
+      code,
+    },
+  });
 }
 
-class EntityNotFoundError extends ApolloError {
-  constructor(message: string, extensions?: Record<string, any>) {
-    super(message, "ENTITY_NOT_FOUND", extensions);
+export default GQLError;
 
-    Object.defineProperty(this, "name", { value: "EntityNotFoundError" });
-  }
-}
-
-export {
-  AuthenticationError,
-  ForbiddenError,
-  PersistedQueryNotFoundError,
-  PersistedQueryNotSupportedError,
-  SyntaxError,
-  UserInputError,
-  ValidationError,
-  InternalServerError,
-  EntityNotFoundError,
-};
+// :: Method of extending the GraphQLError ::
+// class UnexpectedServerError extends GraphQLError {
+//   constructor(message: string, options?: GraphQLErrorOptions) {
+//     super(message, {
+//       ...options,
+//       extensions: {
+//         ...options?.extensions,
+//         code: "UNEXPECTED_SERVER_ERROR",
+//       },
+//     });
+//   }
+// }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { rule, shield } from "graphql-shield";
 import logger from "./logger.js";
-import { InternalServerError } from "./errors.js";
+import GQLError from "./errors.js";
 import { GraphQLError } from "graphql";
 
 const isAuthenticated = rule({ cache: "contextual" })(async (
@@ -27,12 +27,12 @@ export const permissions = shield(
       if (thrownThing instanceof Error) {
         // unexpected errors
         logger.error(thrownThing);
-        return new InternalServerError("SHIELD_FALLBACK_ERROR");
+        return GQLError("SHIELD_FALLBACK_ERROR");
       }
       // what the hell got thrown
       logger.error("The resolver threw something that is not an error.");
       logger.error(thrownThing);
-      return new InternalServerError("SHIELD_FALLBACK_ERROR");
+      return GQLError("SHIELD_FALLBACK_ERROR");
     },
   },
 );

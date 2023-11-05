@@ -3,7 +3,7 @@ import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4
 import { Context } from "../types/context.js";
 import logger from "./logger.js";
 import configs from "./configs.js";
-import * as errors from "./errors.js";
+import GQLError from "./errors.js";
 import pubsub, { subscriptionName } from "./pubsub.js";
 
 const getContext: ContextFunction<
@@ -13,7 +13,7 @@ const getContext: ContextFunction<
   return {
     logger,
     configs,
-    errors,
+    GQLError,
     pubsub,
     subscriptionName,
   };
