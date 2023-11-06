@@ -1,5 +1,5 @@
 import logger from "npmlog";
-import configs from "./configs.js";
+import configs from "../providers/configs.js";
 
 logger.level = "silly";
 

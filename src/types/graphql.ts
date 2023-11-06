@@ -35,11 +35,21 @@ export type Scalars = {
 export type Mutation = {
   __typename?: "Mutation";
   _: Scalars["String"]["output"];
+  signIn?: Maybe<Scalars["String"]["output"]>;
+  signVerify?: Maybe<Scalars["String"]["output"]>;
   user?: Maybe<User>;
 };
 
 export type MutationArgs = {
   message: Scalars["String"]["input"];
+};
+
+export type MutationSignInArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type MutationSignVerifyArgs = {
+  token: Scalars["String"]["input"];
 };
 
 export type MutationUserArgs = {
@@ -50,6 +60,7 @@ export type MutationUserArgs = {
 export type Query = {
   __typename?: "Query";
   _: Scalars["String"]["output"];
+  user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
 };
 
@@ -203,6 +214,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationArgs, "message">
   >;
+  signIn?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSignInArgs, "id">
+  >;
+  signVerify?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSignVerifyArgs, "token">
+  >;
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
     ParentType,
@@ -217,6 +240,7 @@ export type QueryResolvers<
     ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = {
   _?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   users?: Resolver<
     Maybe<Array<Maybe<ResolversTypes["User"]>>>,
     ParentType,

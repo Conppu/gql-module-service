@@ -1,6 +1,6 @@
 import { GraphQLFormattedError } from "graphql/error";
 import { ApolloServerErrorCode } from "@apollo/server/errors";
-import logger from "../providers/logger.js";
+import logger from "./logger.js";
 
 const formatError = (formattedError: GraphQLFormattedError, error: any) => {
   logger.error("FORMAT_ERROR", formattedError.message, error);

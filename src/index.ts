@@ -13,8 +13,8 @@ import application from "./modules/application.js";
 import getContext from "./providers/context.js";
 import { permissions } from "./providers/shield.js";
 import configs from "./providers/configs.js";
-import logger from "./providers/logger.js";
-import formatError from "./utils/format-error.js";
+import logger from "./helpers/logger.js";
+import formatError from "./helpers/format-error.js";
 import { database } from "./providers/prisma.js";
 
 const executor = application.createApolloExecutor();

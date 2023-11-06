@@ -2,8 +2,8 @@ import * as Types from "../../types/graphql";
 import * as gm from "graphql-modules";
 export namespace UserModule {
   interface DefinedFields {
-    Query: "users";
-    Mutation: "user";
+    Query: "users" | "user";
+    Mutation: "user" | "signIn" | "signVerify";
     User: "id" | "email" | "name";
   }
 
@@ -37,10 +37,13 @@ export namespace UserModule {
     Query?: {
       "*"?: gm.Middleware[];
       users?: gm.Middleware[];
+      user?: gm.Middleware[];
     };
     Mutation?: {
       "*"?: gm.Middleware[];
       user?: gm.Middleware[];
+      signIn?: gm.Middleware[];
+      signVerify?: gm.Middleware[];
     };
     User?: {
       "*"?: gm.Middleware[];

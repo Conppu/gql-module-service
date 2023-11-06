@@ -1,17 +1,15 @@
 /* eslint-disable no-undef */
 import { Command } from "commander";
 import { generateKeyPair } from "crypto";
-import { readFileSync, writeFileSync, existsSync, copyFile } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { EOL } from "os";
 import { resolve } from "path";
 
-const startStr = "# =====KEY PAIR START=====";
-const endStr = "# =====KEY PAIR END=====";
+const variables = ["PUBLIC_KEY=", "PRIVATE_KEY=", "PASS_PHRASE="];
 
 const program = new Command();
 
 const envPath = resolve(".env");
-const envExamplePath = resolve(".env.local");
 
 const options = program
   .helpOption("-h, --help", "help message")
@@ -20,32 +18,42 @@ const options = program
   .opts();
 
 async function setEnvValues(input) {
-  if (!existsSync(envPath)) {
-    writeFileSync(envPath, "");
-  }
-  // read file from hdd & split if from a linebreak to a array
-  let ENV_VARS = readFileSync(envPath, "utf8").split(EOL);
+  try {
+    if (!existsSync(envPath)) {
+      writeFileSync(envPath, "");
+    }
+    // read file from hdd & split if from a line break to a array
+    let ENV_VARS = readFileSync(envPath, "utf8").split(EOL);
 
-  const startIndex = ENV_VARS.indexOf(startStr);
-  const endIndex = ENV_VARS.indexOf(endStr);
-
-  if (startIndex >= 0 && endIndex >= 0) {
-    ENV_VARS = [
-      ...ENV_VARS.slice(0, startIndex),
-      ...ENV_VARS.slice(endIndex + 1, ENV_VARS.length),
-    ];
-
-    ENV_VARS.push(startStr);
-    // find the env we want based on the key
-    Object.keys(input).forEach((key) => {
-      ENV_VARS.push(`${key}=${input[key]}`);
+    const itemsIndex = variables.map((each) => {
+      return ENV_VARS.findIndex((e) => e.startsWith(each));
     });
-    ENV_VARS.push(endStr);
+
+    if (itemsIndex.some((e) => e < 0) && ENV_VARS[ENV_VARS.length - 1] !== "") {
+      ENV_VARS.push("");
+    }
+
+    variables.forEach((name, i) => {
+      const index = itemsIndex[i];
+      const key = name.replace("=", "");
+      const data = `${key}=${input[key]}`;
+
+      if (index >= 0) {
+        ENV_VARS[index] = data;
+      } else {
+        ENV_VARS.push(data);
+      }
+    });
+
+    if (itemsIndex.some((e) => e < 0)) {
+      ENV_VARS.push("");
+    }
 
     // write everything back to the file system
     writeFileSync(envPath, ENV_VARS.join(EOL));
     return console.log("KEY PAIR ADDED TO THE .ENV FILE ✅ ✅ ✅");
-  } else {
+  } catch (error) {
+    console.error(error);
     console.error("❌ ❌ ERROR :: KEY PAIR START/END NOT FOUND ❌ ❌");
   }
 }
@@ -80,20 +88,16 @@ async function generateKeys() {
         process.exit(0);
       }
 
+      // For create a multiline string `"${publicKey}"`, `"${privateKey}"` and `"${options.passphrase}"`
       await setEnvValues({
-        PUBLIC_KEY: `"${publicKey}"`,
-        PRIVATE_KEY: `"${privateKey}"`,
-        PASS_PHRASE: options.passphrase ? `"${options.passphrase}"` : '""',
+        PUBLIC_KEY: publicKey.split(/\n/).join(/\n/),
+        PRIVATE_KEY: privateKey.split(/\n/).join(/\n/),
+        PASS_PHRASE: options.passphrase ? options.passphrase : "",
       });
+
       process.exit(0);
-    },
+    }
   );
 }
 
-(async function () {
-  if (!existsSync(envPath)) {
-    return copyFile(envExamplePath, envPath, generateKeys);
-  } else {
-    return generateKeys();
-  }
-})();
+generateKeys();

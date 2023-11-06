@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { rule, shield } from "graphql-shield";
-import logger from "./logger.js";
-import GQLError from "./errors.js";
+import logger from "../helpers/logger.js";
+import GQLError from "../helpers/errors.js";
 import { GraphQLError } from "graphql";
 
 const isAuthenticated = rule({ cache: "contextual" })(async (

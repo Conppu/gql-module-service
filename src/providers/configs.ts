@@ -9,9 +9,12 @@ const IS_STAG = NODE_ENV === "staging";
 const APP_NAME = config.get("APP_NAME") as string;
 
 // SSH KEY PAIR
-const PUBLIC_KEY = process.env["PUBLIC_KEY"] || config.get("SSH.PUBLIC_KEY");
-const PRIVATE_KEY = process.env["PRIVATE_KEY"] || config.get("SSH.PRIVATE_KEY");
-const PASS_PHRASE = process.env["PASS_PHRASE"] || config.get("SSH.PASS_PHRASE");
+const PUBLIC_KEY =
+  process.env["PUBLIC_KEY"] || (config.get("SSH.PUBLIC_KEY") as string);
+const PRIVATE_KEY =
+  process.env["PRIVATE_KEY"] || (config.get("SSH.PRIVATE_KEY") as string);
+const PASS_PHRASE =
+  process.env["PASS_PHRASE"] || (config.get("SSH.PASS_PHRASE") as string);
 
 export default {
   APP_NAME,
@@ -19,8 +22,8 @@ export default {
   PORT: Number(process.env["PORT"]) || config.get("PORT"),
   DATABASE_URL: process.env["DATABASE_URL"] || config.get("DATABASE_URL"),
   SSH: {
-    PUBLIC_KEY,
-    PRIVATE_KEY,
+    PRIVATE_KEY: PRIVATE_KEY.split("/\\n/").join("\n"),
+    PUBLIC_KEY: PUBLIC_KEY.split("/\\n/").join("\n"),
     PASS_PHRASE,
   },
   IS_DEV,
