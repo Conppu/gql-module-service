@@ -13,7 +13,7 @@ import application from "./modules/application.js";
 import getContext from "./providers/context.js";
 import { permissions } from "./providers/shield.js";
 import configs from "./providers/configs.js";
-import logger, { loggerHTTPMiddleware } from "./providers/logger.js";
+import logger from "./providers/logger.js";
 import formatError from "./utils/format-error.js";
 import { database } from "./providers/prisma.js";
 
@@ -29,10 +29,10 @@ const wsServer = new WebSocketServer({
 });
 
 wsServer.on("connection", function connection(ws) {
-  logger.info("Connected to WebSocketServer ✅ ✅ ✅");
+  logger.info("WEBSOCKET", "Connected to WebSocketServer ✅ ✅ ✅");
   ws.on("error", console.error);
   ws.on("pong", () => console.debug("WS connected...."));
-  ws.on("error", logger.error);
+  ws.on("error", (e) => logger.error("WS_ERROR", e.message, e));
 
   ws.on("message", function message(data) {
     console.log("received: %s", data);
@@ -83,8 +83,6 @@ const server = new ApolloServer({
 
 await server.start();
 
-app.use(loggerHTTPMiddleware);
-
 app.use(
   "/graphql",
   cors(),
@@ -96,6 +94,7 @@ app.get("/ping", (_req, res) => res.send("pong"));
 
 httpServer.listen({ port: configs.PORT }, async () => {
   logger.info(
+    "SERVER",
     `🚀 Server ready at http://localhost:${configs.PORT}/graphql ✅ ✅ ✅`,
   );
   await database.connect();

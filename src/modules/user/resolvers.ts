@@ -32,7 +32,7 @@ const resolvers: UserModule.Resolvers = {
         name: name || "",
         email: email || "",
       };
-      ctx.logger.info("Mutation:user", { a: 11 });
+      ctx.logger.info("Mutation:user", "Testing", { a: 11 });
       users.push(data);
       return data;
     },

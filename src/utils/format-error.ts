@@ -3,7 +3,7 @@ import { ApolloServerErrorCode } from "@apollo/server/errors";
 import logger from "../providers/logger.js";
 
 const formatError = (formattedError: GraphQLFormattedError, error: any) => {
-  logger.error(error);
+  logger.error("FORMAT_ERROR", formattedError.message, error);
 
   if (
     formattedError?.extensions?.code ===
