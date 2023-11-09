@@ -43,14 +43,14 @@ const resolvers: UserModule.Resolvers = {
     },
 
     signIn: (_parent, { id }, ctx) => {
-      const token = encodeJWT({ id });
+      const token = encodeJWT(ctx, { id });
       ctx.logger.info("MUTATION :: SIGN IN RESOLVER", { token });
 
       return token || "";
     },
 
     signVerify: (_parent, { token }, ctx) => {
-      const data = decodeJWT(token);
+      const data = decodeJWT(ctx, token);
       ctx.logger.info("MUTATION :: SIGN VERIFY RESOLVER", { data });
 
       return typeof data === "object" ? "IS_VALID" : data;

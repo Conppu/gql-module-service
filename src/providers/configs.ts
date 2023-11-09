@@ -1,5 +1,6 @@
 import "dotenv/config";
 import config from "config";
+import type { SignOptions, VerifyOptions } from "jsonwebtoken";
 
 const NODE_ENV = process.env["NODE_ENV"] || "development";
 const IS_DEV = NODE_ENV === "development";
@@ -16,6 +17,17 @@ const PRIVATE_KEY =
 const PASS_PHRASE =
   process.env["PASS_PHRASE"] || (config.get("SSH.PASS_PHRASE") as string);
 
+const JWT_SIGN_OPTIONS: SignOptions = {
+  expiresIn: Number(60 * 60 * 2), // sec * min * hrs = 2 hrs
+  algorithm: "RS256",
+  issuer: APP_NAME,
+};
+
+const JWT_VERIFY_OPTIONS: VerifyOptions = {
+  algorithms: ["RS256"],
+  issuer: APP_NAME,
+};
+
 export default {
   APP_NAME,
   NODE_ENV,
@@ -29,4 +41,6 @@ export default {
   IS_DEV,
   IS_PROD,
   IS_STAG,
+  JWT_SIGN_OPTIONS,
+  JWT_VERIFY_OPTIONS,
 };

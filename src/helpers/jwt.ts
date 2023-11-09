@@ -1,21 +1,13 @@
-import jwt, { SignOptions, VerifyOptions } from "jsonwebtoken";
-import configs from "../providers/configs.js";
-import logger from "./logger.js";
+import jwt from "jsonwebtoken";
+import { Context } from "../types/context.js";
 
-const { PRIVATE_KEY, PUBLIC_KEY, PASS_PHRASE } = configs.SSH;
+export function encodeJWT(
+  context: Context,
+  payload: object,
+): string | undefined {
+  const { SSH, JWT_SIGN_OPTIONS } = context.configs;
+  const { PRIVATE_KEY, PASS_PHRASE } = SSH;
 
-const signOptions: SignOptions = {
-  expiresIn: Number(60 * 60 * 2), // sec * min * hrs = 2 hrs
-  algorithm: "RS256",
-  issuer: configs.APP_NAME,
-};
-
-const verifyOptions: VerifyOptions = {
-  algorithms: ["RS256"],
-  issuer: configs.APP_NAME,
-};
-
-export function encodeJWT(payload: object): string | undefined {
   try {
     return jwt.sign(
       payload,
@@ -23,20 +15,23 @@ export function encodeJWT(payload: object): string | undefined {
         key: PRIVATE_KEY,
         passphrase: PASS_PHRASE,
       },
-      signOptions,
+      JWT_SIGN_OPTIONS,
     );
   } catch (error) {
-    logger.debug("Error on JWT sign process", error);
+    context.logger.debug("Error on JWT sign process", error);
     return undefined;
   }
 }
 
-export function decodeJWT(token: string): object | string {
+export function decodeJWT(context: Context, token: string): object | string {
+  const { SSH, JWT_VERIFY_OPTIONS } = context.configs;
+  const { PUBLIC_KEY } = SSH;
+
   try {
-    const decoded: any = jwt.verify(token, PUBLIC_KEY, verifyOptions);
+    const decoded: any = jwt.verify(token, PUBLIC_KEY, JWT_VERIFY_OPTIONS);
     return decoded;
   } catch (error) {
-    logger.debug("Error on JWT verify process", error);
+    context.logger.debug("Error on JWT verify process", error);
     if (error instanceof Error) {
       return error.message.replace(" ", "_").toUpperCase();
     }

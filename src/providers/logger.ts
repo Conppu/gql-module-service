@@ -1,5 +1,5 @@
 import { createLogger, format, transports, addColors } from "winston";
-import configs from "../providers/configs.js";
+import configs from "./configs.js";
 
 const { combine, colorize, timestamp, errors, printf, splat, metadata } =
   format;

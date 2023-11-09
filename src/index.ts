@@ -11,11 +11,11 @@ import { expressMiddleware } from "@apollo/server/express4";
 
 import application from "./modules/application.js";
 import getContext from "./providers/context.js";
-import { permissions } from "./providers/shield.js";
 import configs from "./providers/configs.js";
-import logger from "./helpers/logger.js";
-import formatError from "./helpers/format-error.js";
+import logger from "./providers/logger.js";
+import { permissions } from "./providers/shield.js";
 import { database } from "./providers/prisma.js";
+import { formatError } from "./providers/error-handlers.js";
 
 const executor = application.createApolloExecutor();
 const schema = applyMiddleware(application.schema, permissions);
