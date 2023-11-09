@@ -16,10 +16,12 @@ const users = [
 
 const resolvers: UserModule.Resolvers = {
   Query: {
-    users: () => {
+    users: (_parent, _arg, ctx) => {
+      ctx.logger.info("QUERY :: USERS RESOLVER", { users });
       return users;
     },
-    user: (_parent, arg, ctx) => {
+    user: (_parent, _arg, ctx) => {
+      ctx.logger.info("QUERY :: USER RESOLVER", { users });
       if (ctx.configs.IS_PROD) {
         return users[0];
       }
@@ -35,21 +37,21 @@ const resolvers: UserModule.Resolvers = {
         name: name || "",
         email: email || "",
       };
-      ctx.logger.info("Mutation:user", "Testing", data);
+      ctx.logger.info("MUTATION :: USER RESOLVER", { data });
       users.push(data);
       return data;
     },
 
     signIn: (_parent, { id }, ctx) => {
       const token = encodeJWT({ id });
-      ctx.logger.info("Mutation:signIn", "Testing", { token });
+      ctx.logger.info("MUTATION :: SIGN IN RESOLVER", { token });
 
       return token || "";
     },
 
     signVerify: (_parent, { token }, ctx) => {
       const data = decodeJWT(token);
-      ctx.logger.info("Mutation:signIn", "Testing", { data });
+      ctx.logger.info("MUTATION :: SIGN VERIFY RESOLVER", { data });
 
       return typeof data === "object" ? "IS_VALID" : data;
     },

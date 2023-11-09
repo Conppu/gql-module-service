@@ -26,12 +26,11 @@ export const permissions = shield(
       }
       if (thrownThing instanceof Error) {
         // unexpected errors
-        logger.error("SHIELD_FALLBACK_ERROR", thrownThing.message, thrownThing);
+        logger.error(thrownThing);
         return GQLError("SHIELD_FALLBACK_ERROR");
       }
       // what the hell got thrown
       logger.error(
-        "SHIELD_FALLBACK_ERROR",
         "The resolver threw something that is not an error.",
         thrownThing,
       );

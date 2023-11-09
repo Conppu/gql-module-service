@@ -29,26 +29,15 @@ const wsServer = new WebSocketServer({
 });
 
 wsServer.on("connection", function connection(ws) {
-  logger.info("WEBSOCKET", "Connected to WebSocketServer ✅ ✅ ✅");
-  ws.on("error", console.error);
-  ws.on("pong", () => console.debug("WS connected...."));
-  ws.on("error", (e) => logger.error("WS_ERROR", e.message, e));
+  logger.info("WEBSOCKET :: Connected to WebSocketServer ✅ ✅ ✅");
+  ws.on("error", logger.error);
+  ws.on("pong", () => logger.debug("WEBSOCKET :: WS connected...."));
 
   ws.on("message", function message(data) {
     console.log("received: %s", data);
   });
 
   ws.send("something");
-});
-
-const interval = setInterval(function ping() {
-  wsServer.clients.forEach(function each(ws) {
-    ws.ping();
-  });
-}, 30000);
-
-wsServer.on("close", function close() {
-  clearInterval(interval);
 });
 
 const serverCleanup = useServer({ schema }, wsServer);
@@ -94,8 +83,7 @@ app.get("/ping", (_req, res) => res.send("pong"));
 
 httpServer.listen({ port: configs.PORT }, async () => {
   logger.info(
-    "SERVER",
-    `🚀 Server ready at http://localhost:${configs.PORT}/graphql ✅ ✅ ✅`,
+    `SERVER :: 🚀 Server ready at http://localhost:${configs.PORT}/graphql ✅ ✅ ✅`,
   );
   await database.connect();
 });

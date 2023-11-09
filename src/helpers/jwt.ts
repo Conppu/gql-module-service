@@ -26,7 +26,7 @@ export function encodeJWT(payload: object): string | undefined {
       signOptions,
     );
   } catch (error) {
-    logger.verbose("JWT", `Error on JWT sign process`, payload, error);
+    logger.debug("Error on JWT sign process", error);
     return undefined;
   }
 }
@@ -36,9 +36,9 @@ export function decodeJWT(token: string): object | string {
     const decoded: any = jwt.verify(token, PUBLIC_KEY, verifyOptions);
     return decoded;
   } catch (error) {
-    logger.verbose("JWT", `Error on JWT verify process`, token, error);
+    logger.debug("Error on JWT verify process", error);
     if (error instanceof Error) {
-      return error.message;
+      return error.message.replace(" ", "_").toUpperCase();
     }
     return "INVALID_JWD_TOKEN";
   }
