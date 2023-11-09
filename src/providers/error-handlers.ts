@@ -3,7 +3,10 @@ import { GraphQLFormattedError } from "graphql/error";
 import { ApolloServerErrorCode } from "@apollo/server/errors";
 import logger from "./logger.js";
 
-export type ErrorCode = "UNEXPECTED_SERVER_ERROR" | "ENTITY_NOT_FOUND";
+export type ErrorCode =
+  | "UNEXPECTED_SERVER_ERROR"
+  | "ENTITY_NOT_FOUND"
+  | "AUTHENTICATION_FAILED";
 
 export function GQLError(
   message: string,

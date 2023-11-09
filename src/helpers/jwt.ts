@@ -18,7 +18,7 @@ export function encodeJWT(
       JWT_SIGN_OPTIONS,
     );
   } catch (error) {
-    context.logger.debug("Error on JWT sign process", error);
+    context.logger.warn("Error on JWT sign process", error);
     return undefined;
   }
 }
@@ -31,7 +31,7 @@ export function decodeJWT(context: Context, token: string): object | string {
     const decoded: any = jwt.verify(token, PUBLIC_KEY, JWT_VERIFY_OPTIONS);
     return decoded;
   } catch (error) {
-    context.logger.debug("Error on JWT verify process", error);
+    context.logger.warn("Error on JWT verify process", error);
     if (error instanceof Error) {
       return error.message.replace(" ", "_").toUpperCase();
     }

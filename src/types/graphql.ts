@@ -45,7 +45,8 @@ export type MutationArgs = {
 };
 
 export type MutationSignInArgs = {
-  id: Scalars["Int"]["input"];
+  id: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
 };
 
 export type MutationSignVerifyArgs = {
@@ -54,7 +55,8 @@ export type MutationSignVerifyArgs = {
 
 export type MutationUserArgs = {
   email?: InputMaybe<Scalars["String"]["input"]>;
-  name?: InputMaybe<Scalars["String"]["input"]>;
+  name: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
 };
 
 export type Query = {
@@ -72,8 +74,10 @@ export type Subscription = {
 export type User = {
   __typename?: "User";
   email?: Maybe<Scalars["String"]["output"]>;
-  id?: Maybe<Scalars["Int"]["output"]>;
+  id: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
+  password: Scalars["String"]["output"];
+  salt: Scalars["String"]["output"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -184,7 +188,6 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<NonNullable<unknown>>;
-  Int: ResolverTypeWrapper<NonNullable<unknown>>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<NonNullable<unknown>>;
@@ -195,7 +198,6 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: NonNullable<unknown>;
-  Int: NonNullable<unknown>;
   Mutation: {};
   Query: {};
   String: NonNullable<unknown>;
@@ -218,7 +220,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes["String"]>,
     ParentType,
     ContextType,
-    RequireFields<MutationSignInArgs, "id">
+    RequireFields<MutationSignInArgs, "id" | "password">
   >;
   signVerify?: Resolver<
     Maybe<ResolversTypes["String"]>,
@@ -230,7 +232,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes["User"]>,
     ParentType,
     ContextType,
-    Partial<MutationUserArgs>
+    RequireFields<MutationUserArgs, "name" | "password">
   >;
 };
 
@@ -267,8 +269,10 @@ export type UserResolvers<
     ResolversParentTypes["User"] = ResolversParentTypes["User"],
 > = {
   email?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  password?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  salt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

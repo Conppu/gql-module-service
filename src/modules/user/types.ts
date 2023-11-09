@@ -4,7 +4,7 @@ export namespace UserModule {
   interface DefinedFields {
     Query: "users" | "user";
     Mutation: "user" | "signIn" | "signVerify";
-    User: "id" | "email" | "name";
+    User: "id" | "email" | "name" | "password" | "salt";
   }
 
   export type Query = Pick<Types.Query, DefinedFields["Query"]>;
@@ -50,6 +50,8 @@ export namespace UserModule {
       id?: gm.Middleware[];
       email?: gm.Middleware[];
       name?: gm.Middleware[];
+      password?: gm.Middleware[];
+      salt?: gm.Middleware[];
     };
   }
 }
