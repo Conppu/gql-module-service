@@ -4,14 +4,14 @@ type Query {
 }
 
 type Mutation {
-  user(email: String, name: String!, password: String!): User
+  user(email: EmailAddress, name: String!, password: String!): User
   signIn(id: String!, password: String!): String
   signVerify(token: String!): String
 }
 
 type User {
   id: String!
-  email: String
+  email: EmailAddress
   name: String!
   password: String!
   salt: String!

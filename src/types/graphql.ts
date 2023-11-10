@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from "graphql";
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from "graphql";
 import { Context } from "./context";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -30,6 +34,12 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  CountryCode: { input: any; output: any };
+  Date: { input: any; output: any };
+  DateTime: { input: any; output: any };
+  EmailAddress: { input: any; output: any };
+  JSON: { input: any; output: any };
+  JSONObject: { input: any; output: any };
 };
 
 export type Mutation = {
@@ -54,7 +64,7 @@ export type MutationSignVerifyArgs = {
 };
 
 export type MutationUserArgs = {
-  email?: InputMaybe<Scalars["String"]["input"]>;
+  email?: InputMaybe<Scalars["EmailAddress"]["input"]>;
   name: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
 };
@@ -62,6 +72,10 @@ export type MutationUserArgs = {
 export type Query = {
   __typename?: "Query";
   _: Scalars["String"]["output"];
+  date?: Maybe<Scalars["Date"]["output"]>;
+  dateTime?: Maybe<Scalars["DateTime"]["output"]>;
+  json?: Maybe<Scalars["JSON"]["output"]>;
+  jsonObject?: Maybe<Scalars["JSONObject"]["output"]>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
 };
@@ -73,7 +87,7 @@ export type Subscription = {
 
 export type User = {
   __typename?: "User";
-  email?: Maybe<Scalars["String"]["output"]>;
+  email?: Maybe<Scalars["EmailAddress"]["output"]>;
   id: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
   password: Scalars["String"]["output"];
@@ -188,6 +202,12 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<NonNullable<unknown>>;
+  CountryCode: ResolverTypeWrapper<NonNullable<unknown>>;
+  Date: ResolverTypeWrapper<NonNullable<unknown>>;
+  DateTime: ResolverTypeWrapper<NonNullable<unknown>>;
+  EmailAddress: ResolverTypeWrapper<NonNullable<unknown>>;
+  JSON: ResolverTypeWrapper<NonNullable<unknown>>;
+  JSONObject: ResolverTypeWrapper<NonNullable<unknown>>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<NonNullable<unknown>>;
@@ -198,12 +218,48 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: NonNullable<unknown>;
+  CountryCode: NonNullable<unknown>;
+  Date: NonNullable<unknown>;
+  DateTime: NonNullable<unknown>;
+  EmailAddress: NonNullable<unknown>;
+  JSON: NonNullable<unknown>;
+  JSONObject: NonNullable<unknown>;
   Mutation: {};
   Query: {};
   String: NonNullable<unknown>;
   Subscription: {};
   User: NonNullable<unknown>;
 };
+
+export interface CountryCodeScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["CountryCode"], any> {
+  name: "CountryCode";
+}
+
+export interface DateScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["Date"], any> {
+  name: "Date";
+}
+
+export interface DateTimeScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
+  name: "DateTime";
+}
+
+export interface EmailAddressScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["EmailAddress"], any> {
+  name: "EmailAddress";
+}
+
+export interface JsonScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["JSON"], any> {
+  name: "JSON";
+}
+
+export interface JsonObjectScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["JSONObject"], any> {
+  name: "JSONObject";
+}
 
 export type MutationResolvers<
   ContextType = Context,
@@ -242,6 +298,18 @@ export type QueryResolvers<
     ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = {
   _?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes["Date"]>, ParentType, ContextType>;
+  dateTime?: Resolver<
+    Maybe<ResolversTypes["DateTime"]>,
+    ParentType,
+    ContextType
+  >;
+  json?: Resolver<Maybe<ResolversTypes["JSON"]>, ParentType, ContextType>;
+  jsonObject?: Resolver<
+    Maybe<ResolversTypes["JSONObject"]>,
+    ParentType,
+    ContextType
+  >;
   user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   users?: Resolver<
     Maybe<Array<Maybe<ResolversTypes["User"]>>>,
@@ -268,7 +336,11 @@ export type UserResolvers<
   ParentType extends
     ResolversParentTypes["User"] = ResolversParentTypes["User"],
 > = {
-  email?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  email?: Resolver<
+    Maybe<ResolversTypes["EmailAddress"]>,
+    ParentType,
+    ContextType
+  >;
   id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   password?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -277,8 +349,21 @@ export type UserResolvers<
 };
 
 export type Resolvers<ContextType = Context> = {
+  CountryCode?: GraphQLScalarType;
+  Date?: GraphQLScalarType;
+  DateTime?: GraphQLScalarType;
+  EmailAddress?: GraphQLScalarType;
+  JSON?: GraphQLScalarType;
+  JSONObject?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
+
+export type CountryCode = Scalars["CountryCode"];
+export type Date = Scalars["Date"];
+export type DateTime = Scalars["DateTime"];
+export type EmailAddress = Scalars["EmailAddress"];
+export type Json = Scalars["JSON"];
+export type JsonObject = Scalars["JSONObject"];

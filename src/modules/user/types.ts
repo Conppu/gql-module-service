@@ -10,6 +10,7 @@ export namespace UserModule {
   export type Query = Pick<Types.Query, DefinedFields["Query"]>;
   export type User = Pick<Types.User, DefinedFields["User"]>;
   export type Mutation = Pick<Types.Mutation, DefinedFields["Mutation"]>;
+  export type EmailAddress = Types.EmailAddress;
 
   export type QueryResolvers = Pick<
     Types.QueryResolvers,
