@@ -1,22 +1,25 @@
-import { pbkdf2Sync, randomBytes } from "crypto";
+import { pbkdf2Sync, generateKeySync } from "crypto";
 
-export function random(length: number = 16) {
-  return randomBytes(length).toString("hex");
-}
-
-export function hashWithSalt(password: string, salt: string) {
+export function hashPasswordWithSalt(password: string, salt: string) {
   return pbkdf2Sync(password, salt, 1000, 64, `sha512`).toString(`hex`);
 }
 
-export function hashPassword(password: string) {
-  const salt = random();
+export function generatePasswordHash(password: string) {
+  const salt = generateKeySync("hmac", { length: 512 })
+    .export()
+    .toString("hex");
+
   return {
-    hash: hashWithSalt(password, salt),
+    hash: hashPasswordWithSalt(password, salt),
     salt,
   };
 }
 
-export function verifyPassword(password: string, hash: string, salt: string) {
-  const passwordHash = hashWithSalt(password, salt);
+export function verifyPasswordHash(
+  password: string,
+  hash: string,
+  salt: string,
+) {
+  const passwordHash = hashPasswordWithSalt(password, salt);
   return hash === passwordHash;
 }

@@ -1,15 +1,19 @@
-import { hashPassword, random, verifyPassword } from "../../helpers/hash.js";
+import { randomUUID } from "crypto";
+import {
+  generatePasswordHash,
+  verifyPasswordHash,
+} from "../../helpers/hash.js";
 import { decodeJWT, encodeJWT } from "../../helpers/jwt.js";
 import { UserModule } from "./types";
 
 const users = [
   {
-    id: "b6da620c70",
-    email: "1",
-    name: "1",
+    id: "7f855dc5-1ba6-4c6f-9b5b-c4a7cee65b5d",
+    email: "2",
+    name: "2",
     password:
-      "9fc1d4c740154ad5579faca963ea30856cbe20a197b96b497f04bf06ce53c4a67f05dd8e29333ef1a1c365d7c228459e29d1fe7f5f6f61a50beb07c7c76e44b2",
-    salt: "6902d24b9372fda7b519e3ff7bf5febe",
+      "655d9c6a8ef458f8626db6342dec2d82ba5e317223156ec9d5bcb50a50455361872a26afd31a5708bd19b67e4c305f4c802b14c3d05673e0df6b838e5bb4172a",
+    salt: "505ecd6768a539546c5f1718d6bad580a8984ed1fe72c93685b44bf0971eb7f7f0616a5fa5a99a1ae7d777b9162170d15a93408cf67049308034461a92248fbd",
   },
 ];
 
@@ -31,9 +35,9 @@ const resolvers: UserModule.Resolvers = {
 
   Mutation: {
     user: (_parent, { name, email, password }, ctx) => {
-      const { hash, salt } = hashPassword(password);
+      const { hash, salt } = generatePasswordHash(password);
       const data = {
-        id: random(5),
+        id: randomUUID(),
         name: name || "",
         email: email || "",
         salt,
@@ -49,7 +53,11 @@ const resolvers: UserModule.Resolvers = {
       if (!user) {
         throw ctx.GQLError("NO_USER_FOUND", "ENTITY_NOT_FOUND");
       }
-      const passwordMatch = verifyPassword(password, user.password, user.salt);
+      const passwordMatch = verifyPasswordHash(
+        password,
+        user.password,
+        user.salt,
+      );
 
       if (!passwordMatch) {
         throw ctx.GQLError("PASSWORD_MISS_MATCH", "AUTHENTICATION_FAILED");
