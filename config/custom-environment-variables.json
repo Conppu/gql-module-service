@@ -1,0 +1,11 @@
+{
+    "NODE_ENV" : "NODE_ENV",
+    "APP_NAME": "APP_NAME",
+    "PORT": "PORT",
+    "SSH": {
+        "PUBLIC_KEY": "PUBLIC_KEY",
+        "PRIVATE_KEY": "PRIVATE_KEY",
+        "PASS_PHRASE": "PASS_PHRASE"
+    },
+    "DATABASE_URL": "DATABASE_URL"
+}
