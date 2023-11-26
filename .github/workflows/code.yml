@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: "20.x"
       - run: npm ci
-      - run: npm run prisma:gen
+      - run: npm run prisma:generate
       - run: npm run build
 
   # staging-deployment:
